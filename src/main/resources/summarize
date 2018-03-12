@@ -1,0 +1,45 @@
+3.01
+调研Java性能分析
+	byte-buddy：https://github.com/raphw/byte-buddy
+	xrebel：https://zeroturnaround.com/software/xrebel/
+	jiucheng-agent：http://git.oschina.net/jiucheng_org/jiucheng-agent
+本质都是通过javaagent对class文件做修改，插入耗时监控
+下载jiucheng-agent进行修改得到myjavaagent，本地测试Main方法，执行成功
+
+打包上传wf_m，报错：未指定Premain-Class，缺失依赖包。解决：修改pom，添加Premain-Class，添加Boot-Class-Path，添加maven-assembly-plugin
+
+再次启动报错：javassist加载当前工程下的class报NotFoundException
+	CtClass ctClass = classPool.get(clazzName);
+解决1(网上大多数推荐方案，取自官网https://github.com/jboss-javassist/javassist/blob/master/tutorial/tutorial.html)：
+ClassPool pool = ClassPool.getDefault();
+ClassClassPath classPath = new ClassClassPath(this.getClass());
+pool.insertClassPath(classPath);
+加日志发现加载的classpath是MyTransformer，未生效。
+解决2：
+ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+LoaderClassPath loaderClassPath = new LoaderClassPath(classLoader);
+classPool.insertClassPath(loaderClassPath);
+加载WebappClassLoader，问题解决。
+
+再次启动java.lang.RuntimeException: the class is frozen
+发现Web框架中使用了javassist，取消agent中调用ctClass.writeFile()
+
+3.02
+在third站点使用agent，monitor等大量打日志
+除去monitor等文件后，重新启动，发现扫包过程特别慢
+设置include只包含当前third.*，启动正常，输出日至正常
+编写代码解析日志并输出
+
+3.05
+在M端设置include只包含当前m.*，发现注入框架在load component和scan class时特别慢
+引入前端jstree，解析启动日志，发现ComponentFactory#findClassNameFromDir执行缓慢。
+
+3.06
+agent包添加时间戳，查看耗时情况，发现修改ctMethod时间最长，而且大部分bean、util类型不需要修改。
+去掉bean、util，对ctMethod执行方法进一步监控，ctMethod修改一个method大概需要10~80ms。所以启动时加载大量bean的setter和getter方法，会导致启动特别慢。
+
+3.07~3.09
+编写mr、hive等任务
+
+3.12
+使用attach方式代理，参考资料：http://www.infoq.com/cn/articles/javaagent-illustrated，http://jiangbo.me/blog/2012/02/21/java-lang-instrument/

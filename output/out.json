@@ -1,0 +1,40 @@
+[
+	{
+		"children":[
+			{
+				"children":[
+					{
+						"text":"94,881,000 [14.96%] com.xiao1zhao2.myjavaagent.agent.AgentTest#a1"
+					},
+					{
+						"text":"52,074,000 [8.21%] com.xiao1zhao2.myjavaagent.agent.AgentTest#a2"
+					},
+					{
+						"text":"11,358,000 [1.79%] com.xiao1zhao2.myjavaagent.agent.AgentTest#a3"
+					}
+				],
+				"text":"166,678,000 [26.29%] com.xiao1zhao2.myjavaagent.agent.AgentTest#a"
+			},
+			{
+				"children":[
+					{
+						"text":"81,706,000 [12.89%] com.xiao1zhao2.myjavaagent.agent.AgentTest#b1"
+					},
+					{
+						"text":"67,546,000 [10.65%] com.xiao1zhao2.myjavaagent.agent.AgentTest#b2"
+					}
+				],
+				"text":"236,044,000 [37.22%] com.xiao1zhao2.myjavaagent.agent.AgentTest#b"
+			},
+			{
+				"children":[
+					{
+						"text":"95,880,000 [15.12%] com.xiao1zhao2.myjavaagent.agent.AgentTest#c1"
+					}
+				],
+				"text":"187,757,000 [29.61%] com.xiao1zhao2.myjavaagent.agent.AgentTest#c"
+			}
+		],
+		"text":"634,111,000 [100%] com.xiao1zhao2.myjavaagent.agent.AgentTest#testAgent"
+	}
+]
